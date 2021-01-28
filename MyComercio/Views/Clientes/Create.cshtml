@@ -1,0 +1,102 @@
+﻿@model MyComercio.Models.Cliente
+
+@{
+    ViewData["Title"] = "Create";
+    SelectList paises = ViewBag.PaisesSelect;
+
+}
+<h1>Create</h1>
+
+<h4>Cliente</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Apellido" class="control-label"></label>
+                <input asp-for="Apellido" class="form-control" />
+                <span asp-validation-for="Apellido" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Nombre" class="control-label"></label>
+                <input asp-for="Nombre" class="form-control" />
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FechaNacimiento" class="control-label"></label>
+                <input asp-for="FechaNacimiento" class="form-control" />
+                <span asp-validation-for="FechaNacimiento" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Telefono" class="control-label"></label>
+                <input asp-for="Telefono" class="form-control" />
+                <span asp-validation-for="Telefono" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdPais" class="control-label"></label>
+                <select asp-for="IdPais" asp-items="paises" class="form-control" id="SelectCountry"></select>
+                <span asp-validation-for="IdPais" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdCiudad" class="control-label"></label>
+                <select asp-for="IdCiudad" class="form-control" id="CityList"></select>
+                <span asp-validation-for="IdCiudad" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+    <script>
+        $(document).ready(
+            function () {
+                var items = "<option value='0'>Seleccione Ciudad</option>";
+                $("#CityList").html(items);
+
+            });
+
+        $("#SelectCountry").change(
+            function () {
+                var IdPaisSelect = $("#SelectCountry").val();
+                var url = "/ciudad/GetCiudades";
+
+
+                $.getJSON(url, { idPais: IdPaisSelect },
+
+                    function (data) {
+                        var item = "";
+                        $("#CityList").empty();
+                        $.each(data, function (i, city) {
+                            item += '<option value="' + city.id + '">' + city.descripcion + '</option>'
+                        });
+                        $("#CityList").html(item);
+                    });
+
+            });
+
+
+
+    </script>
+
+
+
+
+
+}
