@@ -10,23 +10,22 @@ using MyComercio.Models;
 
 namespace MyComercio.Controllers
 {
-    public class PersonasController : Controller
+    public class VentasController : Controller
     {
         private readonly MyComercioContext _context;
 
-        public PersonasController(MyComercioContext context)
+        public VentasController(MyComercioContext context)
         {
             _context = context;
-          
         }
 
-        // GET: Personas
+        // GET: Ventas
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Persona.ToListAsync());
+            return View(await _context.Venta.ToListAsync());
         }
 
-        // GET: Personas/Details/5
+        // GET: Ventas/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,63 +33,62 @@ namespace MyComercio.Controllers
                 return NotFound();
             }
 
-            var persona = await _context.Persona
+            var venta = await _context.Venta
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (persona == null)
+            if (venta == null)
             {
                 return NotFound();
             }
 
-            return View(persona);
+            return View(venta);
         }
 
-        // GET: Personas/Create
+        // GET: Ventas/Create
         public IActionResult Create()
         {
-            
             return View();
         }
 
-        // POST: Personas/Create
+        // POST: Ventas/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Apellido,Nombre,FechaNacimiento")] Persona persona)
+        public async Task<IActionResult> Create([Bind("Id,Fecha,IdCliente,Observaciones")] Venta venta)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(persona);
+                _context.Add(venta);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(persona);
+            return View(venta);
         }
 
-        // GET: Personas/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
+        // GET: Ventas/Edit/5
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var persona = await _context.Persona.FindAsync(id);
-            if (persona == null)
+            var venta = await _context.Venta.FindAsync(id);
+            if (venta == null)
             {
                 return NotFound();
             }
-            return View(persona);
+            return View(venta);
         }
 
-        // POST: Personas/Edit/5
+        // POST: Ventas/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Apellido,Nombre,FechaNacimiento")] Persona persona)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Fecha,IdCliente,Observaciones")] Venta venta)
         {
-            if (id != persona.Id)
+            if (id != venta.Id)
             {
                 return NotFound();
             }
@@ -99,12 +97,12 @@ namespace MyComercio.Controllers
             {
                 try
                 {
-                    _context.Update(persona);
+                    _context.Update(venta);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PersonaExists(persona.Id))
+                    if (!VentaExists(venta.Id))
                     {
                         return NotFound();
                     }
@@ -115,10 +113,10 @@ namespace MyComercio.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(persona);
+            return View(venta);
         }
 
-        // GET: Personas/Delete/5
+        // GET: Ventas/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -126,32 +124,30 @@ namespace MyComercio.Controllers
                 return NotFound();
             }
 
-            var persona = await _context.Persona
+            var venta = await _context.Venta
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (persona == null)
+            if (venta == null)
             {
                 return NotFound();
             }
 
-            return View(persona);
+            return View(venta);
         }
 
-        // POST: Personas/Delete/5
+        // POST: Ventas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var persona = await _context.Persona.FindAsync(id);
-            _context.Persona.Remove(persona);
+            var venta = await _context.Venta.FindAsync(id);
+            _context.Venta.Remove(venta);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PersonaExists(int id)
+        private bool VentaExists(int id)
         {
-            return _context.Persona.Any(e => e.Id == id);
+            return _context.Venta.Any(e => e.Id == id);
         }
-
-      
     }
 }

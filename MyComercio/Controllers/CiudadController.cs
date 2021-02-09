@@ -47,9 +47,9 @@ namespace MyComercio.Controllers
         // GET: Ciudad/Create
         public IActionResult Create()
         {
-            var myHelper = new MyHelper(_context);
+      
 
-            ViewBag.SelectListPaises = myHelper.GetPaisesSelectList();
+            ViewBag.SelectListPaises = MyHelper.GetPaisesSelectList();
             
             return View();
         }

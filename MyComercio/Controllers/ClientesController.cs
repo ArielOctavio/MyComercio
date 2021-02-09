@@ -28,7 +28,7 @@ namespace MyComercio.Controllers
         }
 
         // GET: Clientes/Details/5
-        public async Task<IActionResult> Details(Guid? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -48,8 +48,8 @@ namespace MyComercio.Controllers
         // GET: Clientes/Create
         public IActionResult Create()
         {
-            MyHelper myHelper = new MyHelper(_context);
-            ViewBag.PaisesSelect = myHelper.GetPaisesSelectList();
+         
+            ViewBag.PaisesSelect = MyHelper.GetPaisesSelectList();
             return View();
         }
            
@@ -63,7 +63,6 @@ namespace MyComercio.Controllers
         {
             if (ModelState.IsValid)
             {
-                cliente.Id = Guid.NewGuid();
                 _context.Add(cliente);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -92,7 +91,7 @@ namespace MyComercio.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Email,Id,Apellido,Nombre,FechaNacimiento,Telefono")] Cliente cliente)
+        public async Task<IActionResult> Edit(int id, [Bind("Email,Id,Apellido,Nombre,FechaNacimiento,Telefono")] Cliente cliente)
         {
             if (id != cliente.Id)
             {
@@ -123,7 +122,7 @@ namespace MyComercio.Controllers
         }
 
         // GET: Clientes/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
@@ -151,9 +150,21 @@ namespace MyComercio.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ClienteExists(Guid id)
+        private bool ClienteExists(int id)
         {
             return _context.Cliente.Any(e => e.Id == id);
+        }
+
+
+
+        public JsonResult GetCliente(string nombre) 
+        {
+
+            var ret = _context.Cliente.Where(x => x.Nombre.Contains(nombre) || x.Apellido.Contains(nombre) ).ToList();
+
+            return Json(ret);
+        
+        
         }
     }
 }

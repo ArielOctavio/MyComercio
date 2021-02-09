@@ -16,12 +16,10 @@ namespace MyComercio.Validations
         {
 
             Pais pais;
-
+           
             using (var context = new MyComercioContext())
             {
-
                 pais = context.Pais.Where(x => x.Descripcion.Trim().ToUpper() == value.ToString().Trim().ToUpper()).FirstOrDefault();
-
             }
             var ret = (pais == null);
 

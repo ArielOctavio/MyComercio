@@ -1,0 +1,100 @@
+﻿@model VentasViewModel
+
+@{
+}
+<h4>Venta</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="NewVenta">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="VentaCabecera.Fecha" class="control-label"></label>
+                <input asp-for="VentaCabecera.Fecha" class="form-control" />
+                <span asp-validation-for="VentaCabecera.Fecha" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="display:none">
+                <label asp-for="VentaCabecera.IdCliente" class="control-label"></label>
+                <input asp-for="VentaCabecera.IdCliente" class="form-control" />
+
+            </div>
+
+            <div class="form-group">
+                <label asp-for="VentaCabecera.IdCliente" class="control-label"></label>
+                <input class="form-control" id="ClienteBusqueda" autocomplete="off" />
+                <span asp-validation-for="VentaCabecera.IdCliente" class="text-danger"></span>
+
+            </div>
+            <div id="Resultados" class="resultadosBusqueda">
+
+            </div>
+
+            <div class="form-group">
+                <label asp-for="VentaCabecera.Observaciones" class="control-label"></label>
+                <input asp-for="VentaCabecera.Observaciones" class="form-control" />
+                <span asp-validation-for="VentaCabecera.Observaciones" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+
+
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <label>Producto</label>
+        <input type="text" name="Producto" id="ProductoID" value="" style="display:none" />
+        <input type="text" id="BuscarProducto" />
+        <div id="ResultadosProductos"></div>
+    </div>
+    <div class="col-md-4">
+        <label>Cantidad</label>
+        <input type="text" name="Cantidad" id="CantidadID" value="" />
+    </div>
+    <div class="col-md-4">
+
+        <input type="button" name="btnAgregar" onclick="addProduct()" value="Agregar" />
+    </div>
+</div>
+<div class="row" id="ListadoProductos"></div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+    <script>
+        function addProduct() {
+            var url = "/VentasVM/AddProduct";
+            var productoId = $('#ProductoID').val();
+            var cantidad = $('#CantidadID').val();
+
+            $.getJSON(url, { IdProducto: productoId, cantidad: cantidad },
+
+                function (data) {
+                    var item = "";
+
+                    $.each(data, function (i, producto) {
+
+                        item += '<div class="col-md-4">' + producto.idProducto + '</div> <div class="col-md-4">' + producto.cantidad + '</div>';
+
+                    })
+
+                    $("#ListadoProductos").html(item);
+
+                }
+            )
+        }
+
+
+
+    </script>
+
+
+
+
+
+}
+
+

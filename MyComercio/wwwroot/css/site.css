@@ -59,8 +59,10 @@ html {
 }
 
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
+    /*background-image: url("https://image.shutterstock.com/image-illustration/3d-wallpaper-design-little-flowers-260nw-1177630450.jpg");*/
+    background-color:lightcyan;
 }
 .footer {
   position: absolute;
@@ -68,4 +70,16 @@ body {
   width: 100%;
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
+}
+
+.resultadosBusqueda {
+    position: fixed; 
+    background-color:white; 
+    font-family:'Comic Sans MS'
+    
+}
+
+.listaResultados:hover {
+    background-color: blue;
+    color: white;
 }

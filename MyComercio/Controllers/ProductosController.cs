@@ -6,27 +6,28 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MyComercio.Data;
+using MyComercio.Helper;
 using MyComercio.Models;
 
 namespace MyComercio.Controllers
 {
-    public class PersonasController : Controller
+    public class ProductosController : Controller
     {
         private readonly MyComercioContext _context;
 
-        public PersonasController(MyComercioContext context)
+        
+        public ProductosController(MyComercioContext context)
         {
             _context = context;
-          
         }
 
-        // GET: Personas
+        // GET: Productos
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Persona.ToListAsync());
+            return View(await _context.Producto.ToListAsync());
         }
 
-        // GET: Personas/Details/5
+        // GET: Productos/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,63 +35,65 @@ namespace MyComercio.Controllers
                 return NotFound();
             }
 
-            var persona = await _context.Persona
+            var producto = await _context.Producto
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (persona == null)
+            if (producto == null)
             {
                 return NotFound();
             }
 
-            return View(persona);
+            return View(producto);
         }
 
-        // GET: Personas/Create
+        // GET: Productos/Create
         public IActionResult Create()
         {
-            
+            ViewBag.Categorias = MyHelper.GetCategoriasList();
             return View();
         }
 
-        // POST: Personas/Create
+        // POST: Productos/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Apellido,Nombre,FechaNacimiento")] Persona persona)
+        public async Task<IActionResult> Create([Bind("Id,Descripcion,Color,Precio,IdCategoria")] Producto producto)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(persona);
+                _context.Add(producto);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(persona);
+            return View(producto);
         }
 
-        // GET: Personas/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
+        // GET: Productos/Edit/5
+        public async Task<IActionResult> Edit(int? id)
         {
+
+            var ls = MyHelper.GetCategoriasList();
             if (id == null)
             {
                 return NotFound();
             }
 
-            var persona = await _context.Persona.FindAsync(id);
-            if (persona == null)
+            var producto = await _context.Producto.FindAsync(id);
+            if (producto == null)
             {
                 return NotFound();
             }
-            return View(persona);
+            return View(producto);
         }
 
-        // POST: Personas/Edit/5
+        // POST: Productos/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Apellido,Nombre,FechaNacimiento")] Persona persona)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Descripcion,Color,Precio,IdCategoria")] Producto producto)
         {
-            if (id != persona.Id)
+            if (id != producto.Id)
             {
                 return NotFound();
             }
@@ -99,12 +102,12 @@ namespace MyComercio.Controllers
             {
                 try
                 {
-                    _context.Update(persona);
+                    _context.Update(producto);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PersonaExists(persona.Id))
+                    if (!ProductoExists(producto.Id))
                     {
                         return NotFound();
                     }
@@ -115,43 +118,51 @@ namespace MyComercio.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(persona);
+            return View(producto);
         }
 
-        // GET: Personas/Delete/5
+        // GET: Productos/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+         
             if (id == null)
             {
                 return NotFound();
             }
 
-            var persona = await _context.Persona
+            var producto = await _context.Producto
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (persona == null)
+            if (producto == null)
             {
                 return NotFound();
             }
 
-            return View(persona);
+            return View(producto);
         }
 
-        // POST: Personas/Delete/5
+        // POST: Productos/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var persona = await _context.Persona.FindAsync(id);
-            _context.Persona.Remove(persona);
+            var producto = await _context.Producto.FindAsync(id);
+            _context.Producto.Remove(producto);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PersonaExists(int id)
+        private bool ProductoExists(int id)
         {
-            return _context.Persona.Any(e => e.Id == id);
+            return _context.Producto.Any(e => e.Id == id);
         }
 
-      
+
+        public JsonResult GetProductos(string productoDescript)
+        {
+            var productos = _context.Producto.Where(x => x.Descripcion.Contains(productoDescript)).ToList();
+            return Json(productos);
+        }
+
+
     }
 }

@@ -10,23 +10,22 @@ using MyComercio.Models;
 
 namespace MyComercio.Controllers
 {
-    public class PersonasController : Controller
+    public class MarcasController : Controller
     {
         private readonly MyComercioContext _context;
 
-        public PersonasController(MyComercioContext context)
+        public MarcasController(MyComercioContext context)
         {
             _context = context;
-          
         }
 
-        // GET: Personas
+        // GET: Marcas
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Persona.ToListAsync());
+            return View(await _context.Marca.ToListAsync());
         }
 
-        // GET: Personas/Details/5
+        // GET: Marcas/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,63 +33,62 @@ namespace MyComercio.Controllers
                 return NotFound();
             }
 
-            var persona = await _context.Persona
+            var marca = await _context.Marca
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (persona == null)
+            if (marca == null)
             {
                 return NotFound();
             }
 
-            return View(persona);
+            return View(marca);
         }
 
-        // GET: Personas/Create
+        // GET: Marcas/Create
         public IActionResult Create()
         {
-            
             return View();
         }
 
-        // POST: Personas/Create
+        // POST: Marcas/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Apellido,Nombre,FechaNacimiento")] Persona persona)
+        public async Task<IActionResult> Create([Bind("Id,Descripcion")] Marca marca)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(persona);
+                _context.Add(marca);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(persona);
+            return View(marca);
         }
 
-        // GET: Personas/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
+        // GET: Marcas/Edit/5
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var persona = await _context.Persona.FindAsync(id);
-            if (persona == null)
+            var marca = await _context.Marca.FindAsync(id);
+            if (marca == null)
             {
                 return NotFound();
             }
-            return View(persona);
+            return View(marca);
         }
 
-        // POST: Personas/Edit/5
+        // POST: Marcas/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Apellido,Nombre,FechaNacimiento")] Persona persona)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Descripcion")] Marca marca)
         {
-            if (id != persona.Id)
+            if (id != marca.Id)
             {
                 return NotFound();
             }
@@ -99,12 +97,12 @@ namespace MyComercio.Controllers
             {
                 try
                 {
-                    _context.Update(persona);
+                    _context.Update(marca);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PersonaExists(persona.Id))
+                    if (!MarcaExists(marca.Id))
                     {
                         return NotFound();
                     }
@@ -115,10 +113,10 @@ namespace MyComercio.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(persona);
+            return View(marca);
         }
 
-        // GET: Personas/Delete/5
+        // GET: Marcas/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -126,32 +124,30 @@ namespace MyComercio.Controllers
                 return NotFound();
             }
 
-            var persona = await _context.Persona
+            var marca = await _context.Marca
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (persona == null)
+            if (marca == null)
             {
                 return NotFound();
             }
 
-            return View(persona);
+            return View(marca);
         }
 
-        // POST: Personas/Delete/5
+        // POST: Marcas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var persona = await _context.Persona.FindAsync(id);
-            _context.Persona.Remove(persona);
+            var marca = await _context.Marca.FindAsync(id);
+            _context.Marca.Remove(marca);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PersonaExists(int id)
+        private bool MarcaExists(int id)
         {
-            return _context.Persona.Any(e => e.Id == id);
+            return _context.Marca.Any(e => e.Id == id);
         }
-
-      
     }
 }

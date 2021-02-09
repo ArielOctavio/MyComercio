@@ -13,10 +13,10 @@ namespace MyComercio.Models
     {
 
         [Key]
-        public int Id { get; set; }
+        public  int Id { get; set; }
 
         [Required]
-        [ValidationUniqueKeyPais]
+        [ValidationUniqueKeyPais(ErrorMessage ="El pais ya existe")]
         public string Descripcion { get; set; }
 
      

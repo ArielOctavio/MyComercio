@@ -7,31 +7,23 @@ using System.Threading.Tasks;
 
 namespace MyComercio.Helper
 {
-    public class MyHelper:IDisposable 
-
+    public static class MyHelper 
     {
+        private static MyComercioContext _context = new MyComercioContext();
 
-        private readonly MyComercioContext _context;
-
-        public MyHelper(MyComercioContext context)
+        public static SelectList GetPaisesSelectList()
         {
-            _context = context;
-        }
-
-        public MyHelper() { }
-
-        public SelectList GetPaisesSelectList()
-        {
-
             var lstPaises = _context.Pais.ToList();
             var SelectListPaises = new SelectList(lstPaises, "Id", "Descripcion");
             return SelectListPaises;
-        
         }
 
-        public void Dispose()
+        public static SelectList GetCategoriasList()
         {
-            
+            var lstCategoria = _context.CategoriaProducto.ToList();
+            var SelectListCategoria = new SelectList(lstCategoria, "Id", "Descripcion");
+            return SelectListCategoria;
         }
+ 
     }
 }

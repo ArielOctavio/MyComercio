@@ -13,10 +13,9 @@ namespace MyComercio.Models
 {
     public class Persona
     {
-        private Guid id;
-
+  
         [Key]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
         [Required(ErrorMessage = "Usted debe poner un apellido")]
         [StringLength(15, MinimumLength = 3, ErrorMessage = "Tenes que escribir mas de 3 caracteres")]

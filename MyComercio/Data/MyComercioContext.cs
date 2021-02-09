@@ -13,19 +13,19 @@ namespace MyComercio.Data
         public MyComercioContext (DbContextOptions<MyComercioContext> options)
             : base(options)
         {
-
             initContext();
         }
 
-        private string connectionString;
+       
         public MyComercioContext() : base()
         {
             initContext();
 
-
         }
         protected override void OnConfiguring(DbContextOptionsBuilder options)  => options.UseSqlServer(connectionString);
 
+
+        private string connectionString;
         private void initContext()
         {
             var builder = new ConfigurationBuilder();
@@ -46,5 +46,15 @@ namespace MyComercio.Data
         public DbSet<MyComercio.Models.Pais> Pais { get; set; }
 
         public DbSet<MyComercio.Models.Ciudad> Ciudad { get; set; }
+
+        public DbSet<MyComercio.Models.CategoriaProducto> CategoriaProducto { get; set; }
+
+        public DbSet<MyComercio.Models.Producto> Producto { get; set; }
+
+        public DbSet<MyComercio.Models.Marca> Marca { get; set; }
+
+        public DbSet<MyComercio.Models.Venta> Venta { get; set; }
+
+        public DbSet<MyComercio.Models.VentaDetalle> VentaDetalle { get; set; }
     }
 }

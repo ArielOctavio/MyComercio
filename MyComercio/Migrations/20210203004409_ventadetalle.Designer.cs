@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyComercio.Data;
 
 namespace MyComercio.Migrations
 {
     [DbContext(typeof(MyComercioContext))]
-    partial class MyComercioContextModelSnapshot : ModelSnapshot
+    [Migration("20210203004409_ventadetalle")]
+    partial class ventadetalle
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
