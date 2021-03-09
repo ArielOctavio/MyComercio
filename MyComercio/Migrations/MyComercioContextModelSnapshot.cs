@@ -138,6 +138,9 @@ namespace MyComercio.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("FileName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("IdCategoria")
                         .HasColumnType("int");
 
@@ -188,6 +191,9 @@ namespace MyComercio.Migrations
 
                     b.Property<int>("IdVenta")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("Precio")
+                        .HasColumnType("decimal(18,4)");
 
                     b.HasKey("Id");
 

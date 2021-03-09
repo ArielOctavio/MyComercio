@@ -149,5 +149,12 @@ namespace MyComercio.Controllers
         {
             return _context.VentaDetalle.Any(e => e.Id == id);
         }
+
+
+        public IActionResult MostrarDetalles(int idVenta)
+        {
+            List<VentaDetalle> lstDetalle=  _context.VentaDetalle.Where(x => x.IdVenta == idVenta).ToList();
+            return View(lstDetalle);
+        }
     }
 }

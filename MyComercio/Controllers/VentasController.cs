@@ -46,24 +46,10 @@ namespace MyComercio.Controllers
         // GET: Ventas/Create
         public IActionResult Create()
         {
-            return View();
+            return RedirectToAction("NewVenta", "VentasVM");
         }
 
-        // POST: Ventas/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Fecha,IdCliente,Observaciones")] Venta venta)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(venta);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(venta);
-        }
+        
 
         // GET: Ventas/Edit/5
         public async Task<IActionResult> Edit(int? id)

@@ -9,7 +9,7 @@ namespace MyComercio.Models
     {
         public int Id { get; set; }
 
-        public DateTime Fecha { get; set; }
+        public DateTime Fecha { get; set; } = DateTime.Now;
 
         public int IdCliente { get; set; }
 

@@ -29,6 +29,8 @@ namespace MyComercio.Models
 
         public int IdMarca { get; set; }
 
+        public string FileName { get; set; }
+
 
         public CategoriaProducto GetCategoriaProducto()
         {

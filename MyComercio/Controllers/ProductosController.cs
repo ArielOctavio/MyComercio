@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -14,11 +17,13 @@ namespace MyComercio.Controllers
     public class ProductosController : Controller
     {
         private readonly MyComercioContext _context;
+        private readonly IWebHostEnvironment _hostEnvironment;
 
-        
-        public ProductosController(MyComercioContext context)
+
+        public ProductosController(MyComercioContext context, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
+            _hostEnvironment = hostEnvironment;
         }
 
         // GET: Productos
@@ -57,10 +62,35 @@ namespace MyComercio.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Descripcion,Color,Precio,IdCategoria")] Producto producto)
+        public async Task<IActionResult> Create([Bind("Id,Descripcion,Color,Precio,IdCategoria,FileName")] Producto producto)
         {
             if (ModelState.IsValid)
             {
+
+                var files = HttpContext.Request.Form.Files;
+                var FileUploadDirectory = Path.Combine(_hostEnvironment.WebRootPath, "Files\\Products");
+
+
+                if (files.Count > 0)
+                {
+                    var file = files.FirstOrDefault();
+
+                    if (file.Length > 0)
+                    {
+                        var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+
+                        using (var fileStream = new FileStream(Path.Combine(FileUploadDirectory, fileName), FileMode.Create))
+                        {
+                            await file.CopyToAsync(fileStream);
+                            producto.FileName = file.FileName;
+
+
+                        }
+
+                    }
+                }
+
+
                 _context.Add(producto);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -124,7 +154,7 @@ namespace MyComercio.Controllers
         // GET: Productos/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-         
+
             if (id == null)
             {
                 return NotFound();

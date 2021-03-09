@@ -35,6 +35,10 @@ function completarDatosCliente(id, nombre, apellido) {
 }
 
 //End Clientes
+
+
+
+//Productos
 $("#BuscarProducto").keyup(function (value) {
     $("#ProductoID").val(null);
 
@@ -57,5 +61,113 @@ $("#BuscarProducto").keyup(function (value) {
 
 });
 
-//Productos
 
+function completarDatosProducto(id, descripcion) {
+
+    $("#BuscarProducto").val(id + ' - ' + descripcion);
+    $("#ProductoID").val(id);
+    $("#ResultadosProductos").empty();
+}
+
+
+function addProduct() {
+    var url = "/VentasVM/AddProduct";
+    var productoId = $('#ProductoID').val();
+    var cantidad = $('#CantidadID').val();
+
+    $.getJSON(url, { IdProducto: productoId, cantidad: cantidad },
+
+        function (data) {
+            var item = "";
+
+            $.each(data, function (i, producto) {
+
+                item += '<div class="col-md-4">' + producto.idProducto + '</div> <div class="col-md-4">' + producto.descripcionProducto + '</div> <div class="col-md-4">' + producto.cantidad + '</div>';
+
+            })
+
+            $("#ListadoProductos").html(item);
+
+        }
+    )
+}
+
+
+function addProductAjax() {
+   
+    var productoId = $('#ProductoID').val();
+    var cantidad = $('#CantidadID').val();
+
+    $.ajax({
+
+        url: "/VentasVM/AddProductAjax",
+        data: { IdProducto: productoId, cantidad: cantidad },
+        type: "post",
+        cache: false,
+
+        success: function (retorno) {
+            $("#ListadoProductos").html(retorno);
+        },
+        error: function (error) {
+
+
+            console.log(error);
+        }
+    });
+}
+
+
+function BorrarProducto(id) {
+    $.ajax({
+
+        url: "/VentasVM/DeleteProduct",
+        data: { IdProducto: id },
+        type: "post",
+        cache: false,
+        success: function (retorno) {
+
+            $("#ListadoProductos").html(retorno);
+
+        },
+        error: function (error) {
+
+            console.log(error);
+        }
+
+    });
+
+
+}
+
+
+// End Productos
+
+
+
+//Venta detalle list
+function MostrarDetalles(Id) {
+
+    //Creamos una funcion ajax que envie los datos al metodo Buscar del Controler Persona
+    $.ajax({
+        //Direccion donde nos queremos comunicar Controller/Metodo
+        url: "/VentaDetalles/MostrarDetalles",
+        //parametros que le pasamos a el Metodo del Controller ( si se fijan en el Controller el metodo Busqueda, recibe como parametro "filtro")
+        data: { 'idVenta': Id },
+        //El tipo es post ya que enviamos datos
+        type: "post",
+        cache: false,
+        success: function (retorno) {
+            //Si el metodo busqueda del controller devuelve algo, lo guardamos en retorno - lo que devuelve es la pagina (View) buscar, osea es un pedazo de codigo HTML que podemos insertar en el DivDinamico
+            $("#DivDetalleVenta").html(retorno);
+
+        },
+        error: function (retorno) {
+            //Si el metodo ajax falla entra por aca y nos advierte de un error
+
+            alert("Se ha producido un error");
+
+
+        }
+    });
+    return true;
+};
